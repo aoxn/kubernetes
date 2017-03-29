@@ -70,8 +70,7 @@ func (persistentvolumeStrategy) PrepareForUpdate(ctx api.Context, obj, old runti
 }
 
 func (persistentvolumeStrategy) ValidateUpdate(ctx api.Context, obj, old runtime.Object) field.ErrorList {
-	errorList := validation.ValidatePersistentVolume(obj.(*api.PersistentVolume))
-	return append(errorList, validation.ValidatePersistentVolumeUpdate(obj.(*api.PersistentVolume), old.(*api.PersistentVolume))...)
+	return validation.ValidatePersistentVolume(obj.(*api.PersistentVolume))
 }
 
 func (persistentvolumeStrategy) AllowUnconditionalUpdate() bool {

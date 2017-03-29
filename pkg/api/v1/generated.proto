@@ -1,5 +1,5 @@
 /*
-Copyright 2016 The Kubernetes Authors.
+Copyright 2017 The Kubernetes Authors.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -1610,6 +1610,19 @@ message NodeSystemInfo {
   optional string architecture = 10;
 }
 
+// Represents an OSS mount that lasts the lifetime of a pod.
+// OSS volumes do not support ownership management or SELinux relabeling.
+message OSSVolumeSource {
+  // Bucket is the OSS bucket name.
+  optional string bucket = 1;
+
+  // Endpoint is the OSS endpoint to be mounted. etc. http://oss-cn-hangzhou.aliyuncs.com
+  optional string endpoint = 2;
+
+  // Options provide ossfs mount options, seperate with colon
+  optional bool options = 3;
+}
+
 // ObjectFieldSelector selects an APIVersioned field of an object.
 message ObjectFieldSelector {
   // Version of the schema the FieldPath is written in terms of, defaults to "v1".
@@ -2015,6 +2028,9 @@ message PersistentVolumeSource {
 
   // PhotonPersistentDisk represents a PhotonController persistent disk attached and mounted on kubelets host machine
   optional PhotonPersistentDiskVolumeSource photonPersistentDisk = 17;
+
+  // OSSVolumeSource represents a persistent storage on alicloud oss.
+  optional OSSVolumeSource oss = 18;
 }
 
 // PersistentVolumeSpec is the specification of a persistent volume.
@@ -3549,6 +3565,9 @@ message VolumeSource {
 
   // PhotonPersistentDisk represents a PhotonController persistent disk attached and mounted on kubelets host machine
   optional PhotonPersistentDiskVolumeSource photonPersistentDisk = 23;
+
+  // OSSVolumeSource represents a persistent storage on alicloud oss.
+  optional OSSVolumeSource oss = 24;
 }
 
 // Represents a vSphere volume resource.

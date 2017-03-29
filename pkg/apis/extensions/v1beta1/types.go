@@ -1128,6 +1128,7 @@ var (
 	GitRepo               FSType = "gitRepo"
 	Secret                FSType = "secret"
 	NFS                   FSType = "nfs"
+	OSS                   FSType = "oss"
 	ISCSI                 FSType = "iscsi"
 	Glusterfs             FSType = "glusterfs"
 	PersistentVolumeClaim FSType = "persistentVolumeClaim"

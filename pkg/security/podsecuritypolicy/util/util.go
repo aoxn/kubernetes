@@ -49,6 +49,7 @@ func GetAllFSTypesAsSet() sets.String {
 		string(extensions.GitRepo),
 		string(extensions.Secret),
 		string(extensions.NFS),
+		string(extensions.OSS),
 		string(extensions.ISCSI),
 		string(extensions.Glusterfs),
 		string(extensions.PersistentVolumeClaim),
@@ -82,6 +83,8 @@ func GetVolumeFSType(v api.Volume) (extensions.FSType, error) {
 		return extensions.Secret, nil
 	case v.NFS != nil:
 		return extensions.NFS, nil
+	case v.OSS != nil:
+		return extensions.OSS,nil
 	case v.ISCSI != nil:
 		return extensions.ISCSI, nil
 	case v.Glusterfs != nil:
