@@ -291,6 +291,8 @@ type VolumeSource struct {
 	AzureDisk *AzureDiskVolumeSource
 	// PhotonPersistentDisk represents a Photon Controller persistent disk attached and mounted on kubelets host machine
 	PhotonPersistentDisk *PhotonPersistentDiskVolumeSource
+	// OSSVolumeSource represents a persistent storage on alicloud oss.
+	OSS *OSSVolumeSource
 }
 
 // Similar to VolumeSource but meant for the administrator who creates PVs.
@@ -353,6 +355,9 @@ type PersistentVolumeSource struct {
 	AzureDisk *AzureDiskVolumeSource
 	// PhotonPersistentDisk represents a Photon Controller persistent disk attached and mounted on kubelets host machine
 	PhotonPersistentDisk *PhotonPersistentDiskVolumeSource
+
+	// OSSVolumeSource represents a persistent storage on alicloud oss.
+	OSS *OSSVolumeSource
 }
 
 type PersistentVolumeClaimVolumeSource struct {
@@ -754,6 +759,19 @@ type NFSVolumeSource struct {
 	// the NFS export to be mounted with read-only permissions
 	// +optional
 	ReadOnly bool
+}
+
+// Represents an OSS mount that lasts the lifetime of a pod.
+// OSS volumes do not support ownership management or SELinux relabeling.
+type OSSVolumeSource struct {
+	// Bucket is the OSS bucket name.
+	Bucket string
+
+	// Endpoint is the OSS endpoint to be mounted. etc. http://oss-cn-hangzhou.aliyuncs.com
+	Endpoint string
+
+	// Options provide ossfs mount options, seperate with colon
+	Options bool
 }
 
 // Represents a Quobyte mount that lasts the lifetime of a pod.

@@ -48,10 +48,12 @@ import (
 	"k8s.io/kubernetes/pkg/volume/glusterfs"
 	"k8s.io/kubernetes/pkg/volume/host_path"
 	"k8s.io/kubernetes/pkg/volume/nfs"
+	"k8s.io/kubernetes/pkg/volume/oss"
 	"k8s.io/kubernetes/pkg/volume/photon_pd"
 	"k8s.io/kubernetes/pkg/volume/quobyte"
 	"k8s.io/kubernetes/pkg/volume/rbd"
 	"k8s.io/kubernetes/pkg/volume/vsphere_volume"
+	"k8s.io/kubernetes/pkg/cloudprovider/providers/alicloud"
 )
 
 // ProbeAttachableVolumePlugins collects all volume plugins for the attach/
@@ -129,6 +131,8 @@ func ProbeControllerVolumePlugins(cloud cloudprovider.Interface, config componen
 			allPlugins = append(allPlugins, azure_dd.ProbeVolumePlugins()...)
 		case photon.ProviderName == cloud.ProviderName():
 			allPlugins = append(allPlugins, photon_pd.ProbeVolumePlugins()...)
+		case alicloud.ProviderName == cloud.ProviderName():
+			allPlugins = append(allPlugins, oss.ProbeVolumePlugins(volume.VolumeConfig{})...)
 		}
 	}
 

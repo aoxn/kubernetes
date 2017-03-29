@@ -324,6 +324,8 @@ type VolumeSource struct {
 	AzureDisk *AzureDiskVolumeSource `json:"azureDisk,omitempty" protobuf:"bytes,22,opt,name=azureDisk"`
 	// PhotonPersistentDisk represents a PhotonController persistent disk attached and mounted on kubelets host machine
 	PhotonPersistentDisk *PhotonPersistentDiskVolumeSource `json:"photonPersistentDisk,omitempty" protobuf:"bytes,23,opt,name=photonPersistentDisk"`
+	// OSSVolumeSource represents a persistent storage on alicloud oss.
+	OSS *OSSVolumeSource `json:"oss,omitempty" protobuf:"bytes,24,opt,name=oss"`
 }
 
 // PersistentVolumeClaimVolumeSource references the user's PVC in the same namespace.
@@ -409,6 +411,8 @@ type PersistentVolumeSource struct {
 	AzureDisk *AzureDiskVolumeSource `json:"azureDisk,omitempty" protobuf:"bytes,16,opt,name=azureDisk"`
 	// PhotonPersistentDisk represents a PhotonController persistent disk attached and mounted on kubelets host machine
 	PhotonPersistentDisk *PhotonPersistentDiskVolumeSource `json:"photonPersistentDisk,omitempty" protobuf:"bytes,17,opt,name=photonPersistentDisk"`
+	// OSSVolumeSource represents a persistent storage on alicloud oss.
+	OSS *OSSVolumeSource `json:"oss,omitempty" protobuf:"bytes,18,opt,name=oss"`
 }
 
 // +genclient=true
@@ -956,6 +960,19 @@ type NFSVolumeSource struct {
 	// More info: http://kubernetes.io/docs/user-guide/volumes#nfs
 	// +optional
 	ReadOnly bool `json:"readOnly,omitempty" protobuf:"varint,3,opt,name=readOnly"`
+}
+
+// Represents an OSS mount that lasts the lifetime of a pod.
+// OSS volumes do not support ownership management or SELinux relabeling.
+type OSSVolumeSource struct {
+	// Bucket is the OSS bucket name.
+	Bucket string `json:"bucket" protobuf:"bytes,1,opt,name=bucket"`
+
+	// Endpoint is the OSS endpoint to be mounted. etc. http://oss-cn-hangzhou.aliyuncs.com
+	Endpoint string `json:"endpoint" protobuf:"bytes,2,opt,name=endpoint"`
+
+	// Options provide ossfs mount options, seperate with colon
+	Options bool `json:"options,omitempty" protobuf:"bytes,3,opt,name=options"`
 }
 
 // Represents an ISCSI disk.

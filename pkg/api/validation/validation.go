@@ -568,6 +568,14 @@ func validateVolumeSource(source *api.VolumeSource, fldPath *field.Path) field.E
 			allErrs = append(allErrs, validateNFSVolumeSource(source.NFS, fldPath.Child("nfs"))...)
 		}
 	}
+	if source.OSS != nil {
+		if numVolumes > 0 {
+			allErrs = append(allErrs, field.Forbidden(fldPath.Child("oss"), "may not specify more than 1 volume type"))
+		} else {
+			numVolumes++
+			allErrs = append(allErrs, validateOSSVolumeSource(source.OSS, fldPath.Child("oss"))...)
+		}
+	}
 	if source.ISCSI != nil {
 		if numVolumes > 0 {
 			allErrs = append(allErrs, field.Forbidden(fldPath.Child("iscsi"), "may not specify more than 1 volume type"))
@@ -839,6 +847,16 @@ func validateNFSVolumeSource(nfs *api.NFSVolumeSource, fldPath *field.Path) fiel
 	}
 	if !path.IsAbs(nfs.Path) {
 		allErrs = append(allErrs, field.Invalid(fldPath.Child("path"), nfs.Path, "must be an absolute path"))
+	}
+	return allErrs
+}
+func validateOSSVolumeSource(oss *api.OSSVolumeSource, fldPath *field.Path) field.ErrorList {
+	allErrs := field.ErrorList{}
+	if len(oss.Endpoint) == 0 {
+		allErrs = append(allErrs, field.Required(fldPath.Child("endpoint"), ""))
+	}
+	if len(oss.Bucket) == 0 {
+		allErrs = append(allErrs, field.Required(fldPath.Child("bucket"), ""))
 	}
 	return allErrs
 }
@@ -1120,6 +1138,14 @@ func ValidatePersistentVolume(pv *api.PersistentVolume) field.ErrorList {
 		} else {
 			numVolumes++
 			allErrs = append(allErrs, validateNFSVolumeSource(pv.Spec.NFS, specPath.Child("nfs"))...)
+		}
+	}
+	if pv.Spec.OSS != nil {
+		if numVolumes > 0 {
+			allErrs = append(allErrs, field.Forbidden(specPath.Child("oss"), "may not specify more than 1 volume type"))
+		} else {
+			numVolumes++
+			allErrs = append(allErrs, validateOSSVolumeSource(pv.Spec.OSS, specPath.Child("oss"))...)
 		}
 	}
 	if pv.Spec.RBD != nil {
